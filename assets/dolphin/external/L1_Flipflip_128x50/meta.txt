@@ -1,0 +1,32 @@
+Filetype: Flipper Animation
+Version: 1
+
+Width: 128
+Height: 50
+Passive frames: 2
+Active frames: 4
+Frames order: 0 1 2 3 2 3
+Active cycles: 2
+Frame rate: 2
+Duration: 3600
+Active cooldown: 5
+
+Bubble slots: 1
+
+Slot: 0
+X: 70
+Y: 25
+Text: BIG\nFLIPPA!
+AlignH: Left
+AlignV: Bottom
+StartFrame: 3
+EndFrame: 4
+
+Slot: 0
+X: 70
+Y: 35
+Text: flip flip
+AlignH: Left
+AlignV: Bottom
+StartFrame: 5
+EndFrame: 6
