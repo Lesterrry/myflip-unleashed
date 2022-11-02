@@ -16,7 +16,7 @@ Bubble slots: 3
 Slot: 0
 X: 1
 Y: 17
-Text: I am happy,\nmy friend!
+Text: Feels like\nsummer!
 AlignH: Right
 AlignV: Bottom
 StartFrame: 3
@@ -25,7 +25,7 @@ EndFrame: 9
 Slot: 1
 X: 1
 Y: 17
-Text: So long and\nthanks for\nall the fish!
+Text: Sea is so warm...
 AlignH: Right
 AlignV: Center
 StartFrame: 3
