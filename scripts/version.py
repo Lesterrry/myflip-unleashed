@@ -32,10 +32,10 @@ class GitVersion:
 
         branch_num = self._exec_git("rev-list --count HEAD") or "n/a"
 
-        version = (
-            os.environ.get("DIST_SUFFIX", None)
-            or "unknown"
-        )
+        try:
+            version = self._exec_git("describe --tags --abbrev=0 --exact-match")
+        except subprocess.CalledProcessError:
+            version = "unknown"
 
         custom_fz_name = (
             os.environ.get("CUSTOM_FLIPPER_NAME", None)
