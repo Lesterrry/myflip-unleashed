@@ -23,7 +23,7 @@ StartFrame: 4
 EndFrame: 7
 
 Slot: 0
-X: 31
+X: 22
 Y: 25
 Text: design >>> code
 AlignH: Right
