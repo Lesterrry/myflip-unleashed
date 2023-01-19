@@ -1,11 +1,9 @@
 ### New changes
-* SubGHz: app launch times improved significantly, also setting_user file no longer overwritten by firmware updates, this update will remove this file (only this version, next ones will not touch it (if you skip this version file will be removed in any case on next update)), be sure to backup if you have custom changes in it! 
-Now this file is actually should be created by user and will be not removed every update!
-* Plugins: Add POCSAG Pager [(by xMasterX & Shmuma)](https://github.com/xMasterX/flipper-pager)
-* Misc fixes
-* OFW: IR button overflow fix
-* OFW: Weather Station: proper event flow for view redraw.
-* OFW: Untangle NFC from Unit Tests 
+* SubGHz: **Somfy Keytis Encoder** and Somfy Telis fixes (PR #297 | by @assasinfil)
+* SubGHz: Change hopping frequency list to have only most used frequencies
+* SubGHz: Block usage of hopping with detect raw at same time (its efficiency is almost 0, it looses signals and all that you can capture is a micro part of end of the signal) (Detect raw also will be removed in a future (and replaced with more correct solution))
+* Plugins -> Updated **ProtoView** [(by antirez)](https://github.com/antirez/protoview)
+* Infrared: Update universal remote assets (by @amec0e) (PR #298)
 
 #### [🎲 Download latest extra apps pack](https://download-directory.github.io/?url=https://github.com/xMasterX/unleashed-extra-pack/tree/main/apps)
 
@@ -15,7 +13,7 @@ Now this file is actually should be created by user and will be not removed ever
 
 ## Please support development of the project
 * Boosty: https://boosty.to/mmxdev
-* destream (100 EUR min): https://destream.net/live/MMX/donate
+* Ko-Fi: https://ko-fi.com/masterx
 * cloudtips (only RU payments accepted): https://pay.cloudtips.ru/p/7b3e9d65
 * YooMoney (only RU payments accepted): https://yoomoney.ru/fundraise/XA49mgQLPA0.221209
 * USDT(TRC20): `TSXcitMSnWXUFqiUfEXrTVpVewXy2cYhrs`
@@ -27,11 +25,16 @@ Now this file is actually should be created by user and will be not removed ever
 * XMR (Monero): `41xUz92suUu1u5Mu4qkrcs52gtfpu9rnZRdBpCJ244KRHf6xXSvVFevdf2cnjS7RAeYr5hn9MsEfxKoFDRSctFjG5fv1Mhn`
 * TON: `EQCOqcnYkvzOZUV_9bPE_8oTbOrOF03MnF-VcJyjisTZmpGf`
 
+### Thanks to our sponsors:
+callmezimbra, Quen0n, MERRON, grvpvl (lvpvrg), art_col, ThurstonWaffles, Moneron, UterGrooll, LUCFER, Northpirate, zloepuzo, T.Rat, Alexey B., ionelife, ...
+and all other great people who supported our project and me (xMasterX), thanks to you all!
+
 **Note: To avoid issues with .dfu, prefer installing using .tgz with qFlipper, web updater or by self update package, all needed assets will be installed**
 
 **Recommended option - Web Updater**
 
-What means `n` in - `flipper-z-f7-update-(version)n.tgz` ? - that means this build comes without our custom animations, only official flipper animations
+What means `n` or `e` in - `flipper-z-f7-update-(version)(n / e).tgz` ? - `n` means this build comes without our custom animations, only official flipper animations, 
+`e` means build has extra apps pack preinstalled
 
 Self-update package (update from microSD) - `flipper-z-f7-update-(version).zip` or download `.tgz` for mobile app / qFlipper
 
