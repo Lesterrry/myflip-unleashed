@@ -1,9 +1,12 @@
 ### New changes
-* SubGHz: **Somfy Keytis Encoder** and Somfy Telis fixes (PR #297 | by @assasinfil)
-* SubGHz: Change hopping frequency list to have only most used frequencies
-* SubGHz: Block usage of hopping with detect raw at same time (its efficiency is almost 0, it looses signals and all that you can capture is a micro part of end of the signal) (Detect raw also will be removed in a future (and replaced with more correct solution))
-* Plugins -> Updated **ProtoView** [(by antirez)](https://github.com/antirez/protoview)
-* Infrared: Update universal remote assets (by @amec0e) (PR #298)
+* SubGHz: **Nice ON2E (Nice One)** support (by @assasinfil | PR #335)
+* SubGHz: Remove 467.75 From freq analyzer since it has too much noise (Frequency is still can be used, just excluded from FA to avoid false detections)
+* Archive and FileBrowser: **Fixed more navigation issues** (by @Willy-JL | PR #334)
+* Plugins -> SubGHz Bruteforcer: Fix Linear Delta 3 repeats (now its more stable and we will be sure signal is received correctly)
+* Plugins: Updated TOTP (Authenticator) [(by akopachov)](https://github.com/akopachov/flipper-zero_authenticator)
+* OFW: **Fix Cyfral & Metakom emulation (My temp fix removed and proper fix from OFW applied)**
+* OFW: BadUSB: disable CDC mode, USB mode switch fix
+* OFW: Updater visual fixes
 
 #### [🎲 Download latest extra apps pack](https://download-directory.github.io/?url=https://github.com/xMasterX/unleashed-extra-pack/tree/main/apps)
 
