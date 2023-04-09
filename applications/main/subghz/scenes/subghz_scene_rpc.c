@@ -2,6 +2,8 @@
 #include <lib/subghz/protocols/keeloq.h>
 #include <lib/subghz/protocols/star_line.h>
 
+#include <lib/subghz/blocks/custom_btn.h>
+
 typedef enum {
     SubGhzRpcStateIdle,
     SubGhzRpcStateLoaded,
@@ -110,6 +112,8 @@ void subghz_scene_rpc_on_exit(void* context) {
 
     keeloq_reset_mfname();
     keeloq_reset_kl_type();
+    keeloq_reset_original_btn();
+    subghz_custom_btns_reset();
     star_line_reset_mfname();
     star_line_reset_kl_type();
 }

@@ -147,6 +147,16 @@ void subghz_scene_receiver_on_enter(void* context) {
     subghz_receiver_set_rx_callback(
         subghz->txrx->receiver, subghz_scene_add_to_history_callback, subghz);
 
+    if(subghz->txrx->starline_state == SubGhzStarLineIgnoreEnable) {
+        SubGhzProtocolDecoderBase* protocoldecoderbase = NULL;
+        protocoldecoderbase =
+            subghz_receiver_search_decoder_base_by_name(subghz->txrx->receiver, "Star Line");
+        if(protocoldecoderbase) {
+            subghz_protocol_decoder_base_set_decoder_callback(
+                protocoldecoderbase, NULL, subghz->txrx->receiver);
+        }
+    }
+
     subghz->state_notifications = SubGhzNotificationStateRx;
     if(subghz->txrx->txrx_state == SubGhzTxRxStateRx) {
         subghz_rx_end(subghz);
@@ -202,6 +212,16 @@ bool subghz_scene_receiver_on_event(void* context, SceneManagerEvent event) {
                 subghz_view_receiver_get_idx_menu(subghz->subghz_receiver);
             scene_manager_next_scene(subghz->scene_manager, SubGhzSceneReceiverInfo);
             DOLPHIN_DEED(DolphinDeedSubGhzReceiverInfo);
+            consumed = true;
+            break;
+        case SubGhzCustomEventViewReceiverDeleteItem:
+            subghz->txrx->idx_menu_chosen =
+                subghz_view_receiver_get_idx_menu(subghz->subghz_receiver);
+
+            subghz_history_delete_item(subghz->txrx->history, subghz->txrx->idx_menu_chosen);
+            subghz_view_receiver_delete_element_callback(subghz->subghz_receiver);
+
+            subghz_scene_receiver_update_statusbar(subghz);
             consumed = true;
             break;
         case SubGhzCustomEventViewReceiverConfig:

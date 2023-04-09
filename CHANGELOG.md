@@ -1,28 +1,27 @@
 ### New changes
-* Desktop: Autolock with PIN Code (by @Willy-JL | PR #338) - **Desktop settings (pin code, favourite app, autolock time) will be resetted!!! Only one time after installing - due to changes in settings structure, after installing of this release desktop settings will not be reset with next release**
-* Desktop: Faster back button hold time for power off, was 2 seconds, now 1.3sec
-* GUI: Fix keyboard capitalization bug (by @Willy-JL | PR #362) (fixes #361)
-* Plugins: Added **SWD Probe** [(by g3gg0)](https://github.com/g3gg0/flipper-swd_probe) (moved from extra pack into main FW)
-* Plugins: Show RSSI in Weather Station app and in POCSAG Pager app
-* Plugins: Improve Tetris fall speed algorithm (by @p3ngu19z | PR #343)
-* Plugins: Add missing buttons into HID app, remove old keyboard app, move Bluetooth remote to Misc
-* Infrared: Assets update (by @amec0e | PR #340 / #357 / #358)
-* Misc: Typo combing (by @Round-Pi | PR #352)
-* OFW: Dolphin: drop holiday animation
-* OFW: fbt: FBT_QUIET option; docs on environment
-* OFW: Delete rwfiletest.bin on exit SDcard benchmark
-* OFW: Re-init NFC when starting the worker 
-* OFW: Up toolchain version to 21
-* OFW: Display Mifare Classic data in NFC app
+* **SubGHz: Keyboard lock fixed**
+### Previous changes
+* SubGHz: AN-Motors AT4 - Add manually fixes
+* SubGHz: StarLine ignore option (in Read -> Config) (by @gid9798 | PR #410)
+* Plugins: Fix `Repeat: 200` bug in SubGHz Remote and Bruteforcer
+* Plugins: Update **TOTP (Authenticator)** [(by akopachov)](https://github.com/akopachov/flipper-zero_authenticator) (Steam guard support)
+* Plugins: Update **UART Terminal** [(by cool4uma)](https://github.com/cool4uma/UART_Terminal/tree/main) (AT commands support)
+* Plugins: Add IR Scope app. (by @kallanreed | PR #407)
+* OFW: scripts: sconsdist: added stub file artifact for older ufbt 
+* OFW: Graphics cleanup and icon rotation
+* OFW: Moved ufbt to fbt codebase
+* OFW: SD Driver: do not cache sd status.
+* OFW: Furi: more gpio checks in HAL
+* OFW: WeatherStation: fix protocol TX141TH-BV2
 
-#### [🎲 Download latest extra apps pack](https://download-directory.github.io/?url=https://github.com/xMasterX/unleashed-extra-pack/tree/main/apps)
+#### [🎲 Download latest extra apps pack](https://github.com/xMasterX/all-the-plugins/archive/refs/heads/main.zip)
 
 [-> How to install firmware](https://github.com/DarkFlippers/unleashed-firmware/blob/dev/documentation/HowToInstall.md)
 
 [-> Download qFlipper (official link)](https://flipperzero.one/update)
 
 ## Please support development of the project
-* Boosty: https://boosty.to/mmxdev
+* **Boosty** (patreon alternative): https://boosty.to/mmxdev
 * Ko-Fi: https://ko-fi.com/masterx
 * cloudtips (only RU payments accepted): https://pay.cloudtips.ru/p/7b3e9d65
 * YooMoney (only RU payments accepted): https://yoomoney.ru/fundraise/XA49mgQLPA0.221209
