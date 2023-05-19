@@ -35,12 +35,6 @@ typedef enum {
     SubGhzSpeakerStateEnable,
 } SubGhzSpeakerState;
 
-/** SubGhzStarLineIgnore state */
-typedef enum {
-    SubGhzStarLineIgnoreDisable,
-    SubGhzStarLineIgnoreEnable,
-} SubGhzStarLineIgnoreState;
-
 /** SubGhzRxKeyState state */
 typedef enum {
     SubGhzRxKeyStateIDLE,
@@ -86,7 +80,20 @@ typedef enum {
     SubGhzViewIdTestPacket,
 } SubGhzViewId;
 
+/** SubGhz load type file */
+typedef enum {
+    SubGhzLoadTypeFileNoLoad,
+    SubGhzLoadTypeFileKey,
+    SubGhzLoadTypeFileRaw,
+} SubGhzLoadTypeFile;
+
 typedef enum {
     SubGhzViewReceiverModeLive,
     SubGhzViewReceiverModeFile,
 } SubGhzViewReceiverMode;
+
+typedef enum {
+    SubGhzDecodeRawStateStart,
+    SubGhzDecodeRawStateLoading,
+    SubGhzDecodeRawStateLoaded,
+} SubGhzDecodeRawState;

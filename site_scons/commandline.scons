@@ -27,6 +27,14 @@ AddOption(
 )
 
 AddOption(
+    "--extra-define",
+    action="append",
+    dest="extra_defines",
+    default=[],
+    help="Extra global define that will be passed to C/C++ compiler, can be specified multiple times",
+)
+
+AddOption(
     "--extra-ext-apps",
     action="store",
     dest="extra_ext_apps",
@@ -91,11 +99,6 @@ vars.AddVariables(
         "UPDATE_VERSION_STRING",
         "Version string for updater package",
         "${DIST_SUFFIX}",
-    ),
-    (
-        "CUSTOM_FLIPPER_NAME",
-        "Replaces OTP flipper name with custom string of 8 chars",
-        "",
     ),
     (
         "FORCE_NO_DIRTY",

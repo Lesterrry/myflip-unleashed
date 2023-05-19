@@ -1,11 +1,10 @@
-from SCons.Errors import StopError
-from SCons.Warnings import warn, WarningOnByDefault
-
 import json
 import os
-import sys
 import pathlib
+import sys
 from functools import reduce
+
+from SCons.Errors import StopError
 
 
 def _load_sdk_data(sdk_root):
@@ -75,20 +74,12 @@ def generate(env, **kw):
     if not sdk_state["meta"]["hw_target"].endswith(sdk_data["hardware"]):
         raise StopError("SDK state file doesn't match hardware target")
 
-    if sdk_state["meta"]["version"] != ufbt_state["version"]:
-        warn(
-            WarningOnByDefault,
-            f"Version mismatch: SDK state vs uFBT: {sdk_state['meta']['version']} vs {ufbt_state['version']}",
-        )
-
     scripts_dir = sdk_current_sdk_dir_node.Dir(sdk_components["scripts.dir"])
     env.SetDefault(
         # Paths
         SDK_DEFINITION=env.File(sdk_data["sdk_symbols"]),
-        FBT_DEBUG_DIR=pathlib.Path(
-            sdk_current_sdk_dir_node.Dir(sdk_components["debug.dir"]).abspath
-        ).as_posix(),
         FBT_SCRIPT_DIR=scripts_dir,
+        FBT_DEBUG_DIR=scripts_dir.Dir("debug"),
         LIBPATH=sdk_current_sdk_dir_node.Dir(sdk_components["lib.dir"]),
         FW_ELF=sdk_current_sdk_dir_node.File(sdk_components["firmware.elf"]),
         FW_BIN=sdk_current_sdk_dir_node.File(sdk_components["full.bin"]),

@@ -2,19 +2,16 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "inputs": [
-        // {
-        //     "id": "BLACKMAGIC",
-        //     "type": "command",
-        //     "command": "shellCommand.execute",
-        //     "args": {
-        //         "useSingleResult": true,
-        //         "env": {
-        //             "PATH": "${workspaceFolder};${env:PATH}"
-        //         },
-        //         "command": "./fbt get_blackmagic",
-        //         "description": "Get Blackmagic device",
-        //     }
-        // },
+        {
+            "id": "BLACKMAGIC",
+            "type": "command",
+            "command": "shellCommand.execute",
+            "args": {
+                "description": "Get Blackmagic device",
+                "useSingleResult": true,
+                "command": "ufbt -s get_blackmagic",
+            }
+        },
     ],
     "configurations": [
         {
@@ -32,6 +29,8 @@
                 "@UFBT_DEBUG_DIR@/stm32wbx.cfg"
             ],
             "postAttachCommands": [
+                "source @UFBT_DEBUG_DIR@/flipperversion.py",
+                "fw-version",
                 "source @UFBT_DEBUG_DIR@/flipperapps.py",
                 "fap-set-debug-elf-root @UFBT_DEBUG_ELF_DIR@"
             ],
@@ -52,31 +51,35 @@
                 "@UFBT_DEBUG_DIR@/stm32wbx.cfg"
             ],
             "postAttachCommands": [
+                "source @UFBT_DEBUG_DIR@/flipperversion.py",
+                "fw-version",
                 "source @UFBT_DEBUG_DIR@/flipperapps.py",
                 "fap-set-debug-elf-root @UFBT_DEBUG_ELF_DIR@"
             ],
             // "showDevDebugOutput": "raw",
         },
-        // {
-        //     "name": "Attach FW (blackmagic)",
-        //     "cwd": "${workspaceFolder}",
-        //     "executable": "@UFBT_FIRMWARE_ELF@",
-        //     "request": "attach",
-        //     "type": "cortex-debug",
-        //     "servertype": "external",
-        //     "gdbTarget": "${input:BLACKMAGIC}",
-        //     "svdFile": "@UFBT_DEBUG_DIR@/STM32WB55_CM4.svd",
-        //     "rtos": "FreeRTOS",
-        //     "postAttachCommands": [
-        //         "monitor swdp_scan",
-        //         "attach 1",
-        //         "set confirm off",
-        //         "set mem inaccessible-by-default off",
-        //         "source @UFBT_DEBUG_DIR@/flipperapps.py",
-        //         "fap-set-debug-elf-root @UFBT_DEBUG_ELF_DIR@"
-        //     ]
-        //     // "showDevDebugOutput": "raw",
-        // },
+        {
+            "name": "Attach FW (blackmagic)",
+            "cwd": "${workspaceFolder}",
+            "executable": "@UFBT_FIRMWARE_ELF@",
+            "request": "attach",
+            "type": "cortex-debug",
+            "servertype": "external",
+            "gdbTarget": "${input:BLACKMAGIC}",
+            "svdFile": "@UFBT_DEBUG_DIR@/STM32WB55_CM4.svd",
+            "rtos": "FreeRTOS",
+            "postAttachCommands": [
+                "monitor swdp_scan",
+                "attach 1",
+                "set confirm off",
+                "set mem inaccessible-by-default off",
+                "source @UFBT_DEBUG_DIR@/flipperversion.py",
+                "fw-version",
+                "source @UFBT_DEBUG_DIR@/flipperapps.py",
+                "fap-set-debug-elf-root @UFBT_DEBUG_ELF_DIR@"
+            ]
+            // "showDevDebugOutput": "raw",
+        },
         {
             "name": "Attach FW (JLink)",
             "cwd": "${workspaceFolder}",
@@ -89,6 +92,8 @@
             "svdFile": "@UFBT_DEBUG_DIR@/STM32WB55_CM4.svd",
             "rtos": "FreeRTOS",
             "postAttachCommands": [
+                "source @UFBT_DEBUG_DIR@/flipperversion.py",
+                "fw-version",
                 "source @UFBT_DEBUG_DIR@/flipperapps.py",
                 "fap-set-debug-elf-root @UFBT_DEBUG_ELF_DIR@"
             ]

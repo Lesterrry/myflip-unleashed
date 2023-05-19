@@ -170,7 +170,6 @@ class Main(App):
             "update.dir",
             "sdk_headers.dir",
             "lib.dir",
-            "debug.dir",
             "scripts.dir",
         )
 
@@ -181,9 +180,9 @@ class Main(App):
         ) as zf:
             for component_key in sdk_components_keys:
                 component_path = self._dist_components.get(component_key)
-                components_paths[component_key] = basename(component_path)
 
                 if component_key.endswith(".dir"):
+                    components_paths[component_key] = basename(component_path)
                     for root, dirnames, files in walk(component_path):
                         if "__pycache__" in dirnames:
                             dirnames.remove("__pycache__")
@@ -199,7 +198,9 @@ class Main(App):
                                 ),
                             )
                 else:
-                    zf.write(component_path, basename(component_path))
+                    # We use fixed names for files to avoid having to regenerate VSCode project
+                    components_paths[component_key] = component_key
+                    zf.write(component_path, component_key)
 
             zf.writestr(
                 "components.json",
@@ -249,13 +250,6 @@ class Main(App):
             )
         bundle_args.extend(self.other_args)
         
-        log_custom_fz_name = (
-            environ.get("CUSTOM_FLIPPER_NAME", None)
-            or ""
-        )
-        if (log_custom_fz_name != "") and (len(log_custom_fz_name) <= 8) and (log_custom_fz_name.isalnum()) and (log_custom_fz_name.isascii()):
-            self.logger.info(f"Flipper Custom Name is set:\n\tName: {log_custom_fz_name} : length - {len(log_custom_fz_name)} chars")
-
         if (bundle_result := UpdateMain(no_exit=True)(bundle_args)) == 0:
             self.note_dist_component("update", "dir", bundle_dir)
             self.logger.info(

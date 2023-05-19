@@ -10,7 +10,7 @@
 
 <br>
 
-Our goal is to make all features possible on this device without any limitations! 
+Most stable custom firmware focused on new features and improvements of original firmware components, with almost no UI changes
 
 <br>
 
@@ -43,7 +43,8 @@ Our Discord Community:
 * Picopass/iClass plugin included in releases
 * Recompiled IR TV Universal Remote for ALL buttons
 * Universal remote for Projectors, Fans, A/Cs and Audio(soundbars, etc.)
-* Customizable Flipper name
+* Customizable Flipper name **Update! Now can be changed in Settings->Desktop** (by @xMasterX and @Willy-JL)
+* Text Input UI element -> Cursor feature (by @Willy-JL)
 - BadUSB -> Keyboard layouts [(by rien > dummy-decoy)](https://github.com/dummy-decoy/flipperzero-firmware/tree/dummy_decoy/bad_usb_keyboard_layout)
 - Sub-GHz -> External CC1101 module support - [(by quen0n)](https://github.com/DarkFlippers/unleashed-firmware/pull/307)
 - Sub-GHz -> `Add manually` menu extended with new protocols
@@ -54,10 +55,12 @@ Our Discord Community:
 - Lock device with pin(or regular lock if pin not set) by holding UP button on main screen [(by an4tur0r)](https://github.com/DarkFlippers/unleashed-firmware/pull/107)
 * Sub-GHz -> Short press OK in frequency analyzer to save detected frequency for usage in Read modes
 * Sub-GHz -> Long press OK button in Sub-GHz Frequency analyzer to switch to Read menu and automatically use selected frequency
+* SubGHz -> New option to use timestamps + protocol name when you saving file, instead of random name - Enable in `Radio Settings -> Time in names = ON`
+* SubGHz -> Read mode UI improvements (scrolling text, + shows time when signal was received) (by @wosk)
 * Sub-GHz -> External CC1101 module support (Hardware SPI used)
 * SubGHz -> **Hold right in received signal list to delete selected signal**
-* SubGHz -> **Custom buttons for Keeloq / Alutech AT4N / Nice Flor S / Somfy Telis / Security+ 2.0** - now you can use arrow buttons to send signal with different button code
-* SubGHz -> BFT Mitto / Somfy Telis / Nice Flor S manual creation with programming new remote into receiver (use button 0xF for BFT Mitto, 0x8 (Prog) on Somfy Telis)
+* SubGHz -> **Custom buttons for Keeloq / Alutech AT4N / Nice Flor S / Somfy Telis / Security+ 2.0 / CAME Atomo** - now you can use arrow buttons to send signal with different button code
+* SubGHz -> BFT Mitto / Somfy Telis / Nice Flor S / CAME Atomo, etc.. manual creation with programming new remote into receiver (use button 0xF for BFT Mitto, 0x8 (Prog) on Somfy Telis)
 * SubGHz -> Debug mode counter increase settings (+1 -> +5, +10, default: +1)
 * SubGHz -> Debug PIN output settings for protocol development
 * Infrared -> Debug TX PIN output settings
@@ -67,11 +70,13 @@ Our Discord Community:
 Also check the changelog in releases for latest updates!
 
 ### Current modified and new Sub-GHz protocols list:
-Thanks to Official team (to their SubGHz Developer, Skorp) for implementing decoders for these protocols.
+Thanks to Official team (to their SubGHz Developer, Skorp) for implementing decoders for these protocols in OFW.
 
 Keeloq [Not ALL systems supported for decode or emulation yet!] - [Supported manufacturers list](https://0bin.net/paste/VwR2lNJY#WH9vnPgvcp7w6zVKucFCuNREKAcOij8KsJ6vqLfMn3b)
 
 Encoders or sending made by @xMasterX:
+- Nero Radio 57bit (+ 56bit encoder improvements)
+- CAME 12bit/24bit encoder fixes (already merged in OFW)
 - Keeloq: HCS101
 - Keeloq: AN-Motors
 - Keeloq: JCM Tech
@@ -86,24 +91,24 @@ Encoders or sending made by @xMasterX:
 - Keeloq: CAME Space
 - Keeloq: Aprimatic (model TR and similar)
 
-Encoders/sending made by @Eng1n33r & @xMasterX:
-- CAME Atomo
-- Nice Flor S
+Encoders or sending made by @Eng1n33r(first implementation in Q2 2022) & @xMasterX (current version):
+- CAME Atomo -> Update! check out new [instructions](https://github.com/DarkFlippers/unleashed-firmware/blob/dev/documentation/SubGHzRemoteProg.md)
+- Nice Flor S -> How to create new remote - [instructions](https://github.com/DarkFlippers/unleashed-firmware/blob/dev/documentation/SubGHzRemoteProg.md)
 - FAAC SLH (Spa) [External seed calculation required (For info contact me in Discord: Nano#8998)] 
 - Keeloq: BFT Mitto [External seed calculation required (For info contact me in Discord: Nano#8998)] -> Update! check out new [instructions](https://github.com/DarkFlippers/unleashed-firmware/blob/dev/documentation/SubGHzRemoteProg.md)
 - Star Line
-- Security+ v1 & v2
+- Security+ v1 & v2 (encoders was made in OFW)
 
 Encoders made by @assasinfil & @xMasterX:
-- Somfy Telis
+- Somfy Telis -> How to create new remote - [instructions](https://github.com/DarkFlippers/unleashed-firmware/blob/dev/documentation/SubGHzRemoteProg.md)
 - Somfy Keytis
 - KingGates Stylo 4k
-- Alutech AT-4N
-- Nice ON2E (Nice One)
+- Alutech AT-4N -> How to create new remote - [instructions](https://github.com/DarkFlippers/unleashed-firmware/blob/dev/documentation/SubGHzRemoteProg.md)
+- Nice ON2E (Nice One) -> How to create new remote - [instructions](https://github.com/DarkFlippers/unleashed-firmware/blob/dev/documentation/SubGHzRemoteProg.md)
 
 ## Please support development of the project
 The majority of this project is developed and maintained by me, @xMasterX.
-I'm unemployed because of the war, and the only income I receive is from your donations.
+I'm unemployed, and the only income I receive is from your donations.
 Our team is small and the guys are working on this project as much as they can solely based on the enthusiasm they have for this project and the community.
 - @assasinfil - SubGHz
 - @Svaarich - UI design and animations
@@ -115,7 +120,6 @@ The amount of work done on this project is huge and we need your support, no mat
 Also, regarding our releases, every build has and always will be free and open-source. There will be no paywall releases or closed-source apps within the firmware. As long as I am working on this project it will never happen.
 You can support us by using links or addresses below:
 * **Boosty** (patreon alternative): https://boosty.to/mmxdev
-* Ko-Fi: https://ko-fi.com/masterx
 * cloudtips (only RU payments accepted): https://pay.cloudtips.ru/p/7b3e9d65
 * YooMoney (only RU payments accepted): https://yoomoney.ru/fundraise/XA49mgQLPA0.221209
 * USDT(TRC20): `TSXcitMSnWXUFqiUfEXrTVpVewXy2cYhrs`
@@ -159,6 +163,8 @@ You can support us by using links or addresses below:
 - **UART Terminal** [(by cool4uma)](https://github.com/cool4uma/UART_Terminal/tree/main)
 - **ProtoView** [(by antirez)](https://github.com/antirez/protoview)
 - **SWD Probe** [(by g3gg0)](https://github.com/g3gg0/flipper-swd_probe)
+- IR Scope [(by kallanreed)](https://github.com/DarkFlippers/unleashed-firmware/pull/407)
+- BadBT plugin (BT version of BadKB) [(by Willy-JL, ClaraCrazy, XFW contributors)](https://github.com/ClaraCrazy/Flipper-Xtreme/tree/dev/applications/main/bad_kb)
 
 Games:
 - DOOM (fixed) [(by p4nic4ttack)](https://github.com/p4nic4ttack/doom-flipper-zero/)
@@ -173,6 +179,7 @@ Games:
 - Solitaire [(by teeebor)](https://github.com/teeebor/flipper_games)
 - BlackJack [(by teeebor)](https://github.com/teeebor/flipper_games)
 - 2048 game [(by eugene-kirzhanov)](https://github.com/eugene-kirzhanov/flipper-zero-2048-game)
+- Bomberduck [(by leo-need-more-coffee)](https://github.com/leo-need-more-coffee/flipperzero-bomberduck)
 
 
 # Instructions
