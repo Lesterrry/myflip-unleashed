@@ -16,9 +16,10 @@ extern "C" {
 
 #define FURI_HAL_VERSION_NAME_LENGTH 8
 #define FURI_HAL_VERSION_ARRAY_NAME_LENGTH (FURI_HAL_VERSION_NAME_LENGTH + 1)
-#define FURI_HAL_BT_ADV_NAME_LENGTH (18 + 1) // 18 characters + null terminator
 /** BLE symbol + "Flipper " + name */
 #define FURI_HAL_VERSION_DEVICE_NAME_LENGTH (1 + 8 + FURI_HAL_VERSION_ARRAY_NAME_LENGTH)
+// 18 characters + null terminator
+#define FURI_HAL_BT_ADV_NAME_LENGTH (FURI_HAL_VERSION_DEVICE_NAME_LENGTH + 1)
 
 /** OTP Versions enum */
 typedef enum {
@@ -34,6 +35,7 @@ typedef enum {
     FuriHalVersionColorUnknown = 0x00,
     FuriHalVersionColorBlack = 0x01,
     FuriHalVersionColorWhite = 0x02,
+    FuriHalVersionColorTransparent = 0x03,
 } FuriHalVersionColor;
 
 /** Device Regions */
@@ -85,6 +87,12 @@ const char* furi_hal_version_get_fcc_id();
  * @return     IC id as C-string
  */
 const char* furi_hal_version_get_ic_id();
+
+/** Get MIC id
+ *
+ * @return     MIC id as C-string
+ */
+const char* furi_hal_version_get_mic_id();
 
 /** Get OTP version
  *
@@ -203,6 +211,8 @@ size_t furi_hal_version_uid_size();
  * @return     pointer to UID
  */
 const uint8_t* furi_hal_version_uid();
+
+const uint8_t* furi_hal_version_uid_default();
 
 #ifdef __cplusplus
 }

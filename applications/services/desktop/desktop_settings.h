@@ -8,7 +8,7 @@
 #include <toolbox/saved_struct.h>
 #include <storage/storage.h>
 
-#define DESKTOP_SETTINGS_VER (9)
+#define DESKTOP_SETTINGS_VER (12)
 
 #define DESKTOP_SETTINGS_PATH INT_PATH(DESKTOP_SETTINGS_FILE_NAME)
 #define DESKTOP_SETTINGS_MAGIC (0x17)
@@ -43,15 +43,12 @@
 #define DISPLAY_BATTERY_RETRO_5 4
 #define DISPLAY_BATTERY_BAR_PERCENT 5
 
-#define FAP_LOADER_APP_NAME "Applications"
-
 typedef struct {
     InputKey data[MAX_PIN_SIZE];
     uint8_t length;
 } PinCode;
 
 typedef struct {
-    bool is_external;
     char name_or_path[MAX_APP_LENGTH];
 } FavoriteApp;
 
@@ -63,4 +60,5 @@ typedef struct {
     uint32_t auto_lock_delay_ms;
     uint8_t displayBatteryPercentage;
     uint8_t dummy_mode;
+    uint8_t display_clock;
 } DesktopSettings;

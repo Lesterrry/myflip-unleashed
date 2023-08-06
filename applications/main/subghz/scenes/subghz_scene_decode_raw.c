@@ -93,7 +93,9 @@ bool subghz_scene_decode_raw_start(SubGhz* subghz) {
 
         subghz->decode_raw_file_worker_encoder = subghz_file_encoder_worker_alloc();
         if(subghz_file_encoder_worker_start(
-               subghz->decode_raw_file_worker_encoder, furi_string_get_cstr(file_name))) {
+               subghz->decode_raw_file_worker_encoder,
+               furi_string_get_cstr(file_name),
+               subghz_txrx_radio_device_get_name(subghz->txrx))) {
             //the worker needs a file in order to open and read part of the file
             furi_delay_ms(100);
         } else {
@@ -179,10 +181,11 @@ void subghz_scene_decode_raw_on_enter(void* context) {
                 furi_string_get_cstr(item_time),
                 subghz_history_get_type_protocol(subghz->history, i));
         }
-        furi_string_free(item_name);
-        furi_string_free(item_time);
         subghz_view_receiver_set_idx_menu(subghz->subghz_receiver, subghz->idx_menu_chosen);
     }
+
+    furi_string_free(item_name);
+    furi_string_free(item_time);
 
     subghz_scene_receiver_update_statusbar(subghz);
 

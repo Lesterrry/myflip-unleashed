@@ -6,7 +6,7 @@
 #include <core/common_defines.h>
 #include <core/log.h>
 #include <gui/modules/file_browser_worker.h>
-#include <fap_loader/fap_loader_app.h>
+#include <flipper_application/flipper_application.h>
 #include <math.h>
 #include <furi_hal.h>
 
@@ -381,7 +381,7 @@ void archive_add_app_item(ArchiveBrowserView* browser, const char* name) {
 static bool archive_get_fap_meta(FuriString* file_path, FuriString* fap_name, uint8_t** icon_ptr) {
     Storage* storage = furi_record_open(RECORD_STORAGE);
     bool success = false;
-    if(fap_loader_load_name_and_icon(file_path, storage, icon_ptr, fap_name)) {
+    if(flipper_application_load_name_and_icon(file_path, storage, icon_ptr, fap_name)) {
         success = true;
     }
     furi_record_close(RECORD_STORAGE);
@@ -419,10 +419,12 @@ void archive_show_file_menu(ArchiveBrowserView* browser, bool show) {
         ArchiveBrowserViewModel * model,
         {
             if(show) {
+                model->menu = true;
+                model->menu_idx = 0;
+                menu_array_reset(model->context_menu);
                 if(archive_is_item_in_array(model, model->item_idx)) {
-                    model->menu = true;
-                    model->menu_idx = 0;
-                    menu_array_reset(model->context_menu);
+                    model->menu_file_manage = false;
+
                     ArchiveFile_t* selected =
                         files_array_get(model->files, model->item_idx - model->array_offset);
                     selected->fav =
@@ -430,7 +432,10 @@ void archive_show_file_menu(ArchiveBrowserView* browser, bool show) {
                 }
             } else {
                 model->menu = false;
+                model->menu_file_manage = false;
                 model->menu_idx = 0;
+                model->menu_can_switch = false;
+                menu_array_reset(model->context_menu);
             }
         },
         true);

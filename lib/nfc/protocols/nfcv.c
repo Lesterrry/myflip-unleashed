@@ -149,12 +149,18 @@ bool nfcv_read_card(NfcVReader* reader, FuriHalNfcDevData* nfc_data, NfcVData* n
         return false;
     }
 
+    /* clear all know sub type data before reading them */
+    memset(&nfcv_data->sub_data, 0x00, sizeof(nfcv_data->sub_data));
+
     if(slix_check_card_type(nfc_data)) {
         FURI_LOG_I(TAG, "NXP SLIX detected");
         nfcv_data->sub_type = NfcVTypeSlix;
     } else if(slix2_check_card_type(nfc_data)) {
         FURI_LOG_I(TAG, "NXP SLIX2 detected");
         nfcv_data->sub_type = NfcVTypeSlix2;
+        if(slix2_read_custom(nfc_data, nfcv_data) != ERR_NONE) {
+            return false;
+        }
     } else if(slix_s_check_card_type(nfc_data)) {
         FURI_LOG_I(TAG, "NXP SLIX-S detected");
         nfcv_data->sub_type = NfcVTypeSlixS;
@@ -410,6 +416,9 @@ void nfcv_emu_free(NfcVData* nfcv_data) {
         digital_sequence_free(nfcv_data->emu_air.nfcv_signal);
     }
     if(nfcv_data->emu_air.reader_signal) {
+        // Stop pulse reader and disable bus before free
+        pulse_reader_stop(nfcv_data->emu_air.reader_signal);
+        // Free pulse reader
         pulse_reader_free(nfcv_data->emu_air.reader_signal);
     }
 
@@ -435,7 +444,7 @@ void nfcv_emu_send(
     furi_assert(nfcv);
 
     /* picked default value (0) to match the most common format */
-    if(!flags) {
+    if(flags == NfcVSendFlagsNormal) {
         flags = NfcVSendFlagsSof | NfcVSendFlagsCrc | NfcVSendFlagsEof |
                 NfcVSendFlagsOneSubcarrier | NfcVSendFlagsHighRate;
     }
@@ -609,9 +618,34 @@ void nfcv_emu_handle_packet(
 
         if(ctx->flags & NFCV_REQ_FLAG_AFI) {
             uint8_t afi = nfcv_data->frame[ctx->payload_offset];
-            if(afi == nfcv_data->afi) {
-                respond = true;
+
+            uint8_t family = (afi & 0xF0);
+            uint8_t subfamily = (afi & 0x0F);
+
+            if(family) {
+                if(subfamily) {
+                    /* selected family and subfamily only */
+                    if(afi == nfcv_data->afi) {
+                        respond = true;
+                    }
+                } else {
+                    /* selected family, any subfamily */
+                    if(family == (nfcv_data->afi & 0xf0)) {
+                        respond = true;
+                    }
+                }
+            } else {
+                if(subfamily) {
+                    /* proprietary subfamily only */
+                    if(afi == nfcv_data->afi) {
+                        respond = true;
+                    }
+                } else {
+                    /* all families and subfamilies */
+                    respond = true;
+                }
             }
+
         } else {
             respond = true;
         }
@@ -737,13 +771,19 @@ void nfcv_emu_handle_packet(
     case NFCV_CMD_READ_MULTI_BLOCK:
     case NFCV_CMD_READ_BLOCK: {
         uint8_t block = nfcv_data->frame[ctx->payload_offset];
-        uint8_t blocks = 1;
+        int blocks = 1;
 
         if(ctx->command == NFCV_CMD_READ_MULTI_BLOCK) {
             blocks = nfcv_data->frame[ctx->payload_offset + 1] + 1;
         }
 
-        if(block + blocks <= nfcv_data->block_num) {
+        /* limit the maximum block count, underflow accepted */
+        if(block + blocks > nfcv_data->block_num) {
+            blocks = nfcv_data->block_num - block;
+        }
+
+        /* only respond with the valid blocks, if there are any */
+        if(blocks > 0) {
             uint8_t buffer_pos = 0;
 
             ctx->response_buffer[buffer_pos++] = NFCV_NOERROR;
@@ -770,10 +810,13 @@ void nfcv_emu_handle_packet(
                 ctx->response_flags,
                 ctx->send_time);
         } else {
-            ctx->response_buffer[0] = NFCV_RES_FLAG_ERROR;
-            ctx->response_buffer[1] = NFCV_ERROR_GENERIC;
-            nfcv_emu_send(
-                tx_rx, nfcv_data, ctx->response_buffer, 2, ctx->response_flags, ctx->send_time);
+            /* reply with an error only in addressed or selected mode */
+            if(ctx->addressed || ctx->selected) {
+                ctx->response_buffer[0] = NFCV_RES_FLAG_ERROR;
+                ctx->response_buffer[1] = NFCV_ERROR_GENERIC;
+                nfcv_emu_send(
+                    tx_rx, nfcv_data, ctx->response_buffer, 2, ctx->response_flags, ctx->send_time);
+            }
         }
         snprintf(nfcv_data->last_command, sizeof(nfcv_data->last_command), "READ BLOCK %d", block);
 
@@ -1323,7 +1366,7 @@ bool nfcv_emu_loop(
             bits_received += 2;
 
             if(periods == 1) {
-                byte_value |= 0x00 << 6;
+                byte_value |= 0x00 << 6; // -V684
                 periods_previous = 6;
             } else if(periods == 3) {
                 byte_value |= 0x01 << 6;
@@ -1372,13 +1415,15 @@ bool nfcv_emu_loop(
 
         pulse_reader_start(nfcv_data->emu_air.reader_signal);
         ret = true;
-    } else {
-        if(frame_state != NFCV_FRAME_STATE_SOF1) {
+
+    }
 #ifdef NFCV_VERBOSE
+    else {
+        if(frame_state != NFCV_FRAME_STATE_SOF1) {
             FURI_LOG_T(TAG, "leaving while in state: %lu", frame_state);
-#endif
         }
     }
+#endif
 
 #ifdef NFCV_DIAGNOSTIC_DUMPS
     if(period_buffer_pos) {

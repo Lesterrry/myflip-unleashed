@@ -1,8 +1,6 @@
 #include "../subghz_i.h"
 #include "../views/transmitter.h"
 #include <dolphin/dolphin.h>
-#include <lib/subghz/protocols/keeloq.h>
-#include <lib/subghz/protocols/star_line.h>
 
 #include <lib/subghz/blocks/custom_btn.h>
 
@@ -40,13 +38,14 @@ bool subghz_scene_transmitter_update_data_show(void* context) {
         furi_string_free(modulation_str);
         furi_string_free(key_str);
     }
+    subghz_view_transmitter_set_radio_device_type(
+        subghz->subghz_transmitter, subghz_txrx_radio_device_get(subghz->txrx));
     return ret;
 }
 
 void subghz_scene_transmitter_on_enter(void* context) {
     SubGhz* subghz = context;
 
-    keeloq_reset_original_btn();
     subghz_custom_btns_reset();
 
     if(!subghz_scene_transmitter_update_data_show(subghz)) {
@@ -70,7 +69,7 @@ bool subghz_scene_transmitter_on_event(void* context, SceneManagerEvent event) {
             if(subghz_tx_start(subghz, subghz_txrx_get_fff_data(subghz->txrx))) {
                 subghz->state_notifications = SubGhzNotificationStateTx;
                 subghz_scene_transmitter_update_data_show(subghz);
-                DOLPHIN_DEED(DolphinDeedSubGhzSend);
+                dolphin_deed(DolphinDeedSubGhzSend);
             }
             return true;
         } else if(event.event == SubGhzCustomEventViewTransmitterSendStop) {
@@ -107,10 +106,6 @@ bool subghz_scene_transmitter_on_event(void* context, SceneManagerEvent event) {
 void subghz_scene_transmitter_on_exit(void* context) {
     SubGhz* subghz = context;
     subghz->state_notifications = SubGhzNotificationStateIDLE;
-    keeloq_reset_mfname();
-    keeloq_reset_kl_type();
-    keeloq_reset_original_btn();
-    subghz_custom_btns_reset();
-    star_line_reset_mfname();
-    star_line_reset_kl_type();
+
+    subghz_txrx_reset_dynamic_and_custom_btns(subghz->txrx);
 }
