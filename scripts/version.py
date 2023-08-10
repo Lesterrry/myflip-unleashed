@@ -35,10 +35,12 @@ class GitVersion:
             or "unknown"
         )
 
-        version = (
-            os.environ.get("DIST_SUFFIX", None)
-            or "unknown"
-        )
+        try:
+            version = self._exec_git("describe --tags --abbrev=0 --exact-match")
+        except subprocess.CalledProcessError:
+            version = "unknown"
+
+        print(f"==== Version: {version}")
 
         force_no_dirty = (
             os.environ.get("FORCE_NO_DIRTY", None)
