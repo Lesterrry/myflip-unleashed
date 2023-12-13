@@ -3,7 +3,6 @@
 #include <gui/scene_manager.h>
 #include <gui/view_stack.h>
 #include <stdint.h>
-#include <portmacro.h>
 
 #include "../desktop.h"
 #include "../desktop_i.h"
@@ -85,6 +84,10 @@ bool desktop_scene_locked_on_event(void* context, SceneManagerEvent event) {
         switch(event.event) {
         case DesktopLockedEventUnlocked:
             desktop_unlock(desktop);
+            consumed = true;
+            break;
+        case DesktopLockedEventDoorsClosed:
+            notification_message(desktop->notification, &sequence_display_backlight_off);
             consumed = true;
             break;
         case DesktopLockedEventUpdate:

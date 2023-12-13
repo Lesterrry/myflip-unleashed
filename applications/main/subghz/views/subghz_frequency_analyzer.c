@@ -21,13 +21,13 @@
 #define MAX_HISTORY 4
 
 static const uint32_t subghz_frequency_list[] = {
-    300000000, 302757000, 303875000, 304250000, 307000000, 307500000, 307800000, 309000000,
-    310000000, 312000000, 312100000, 313000000, 313850000, 314000000, 314350000, 314980000,
-    315000000, 318000000, 330000000, 345000000, 348000000, 350000000, 387000000, 390000000,
-    418000000, 430000000, 431000000, 431500000, 433075000, 433220000, 433420000, 433657070,
-    433889000, 433920000, 434075000, 434176948, 434390000, 434420000, 434775000, 438900000,
-    440175000, 464000000, 779000000, 868350000, 868400000, 868800000, 868950000, 906400000,
-    915000000, 925000000, 928000000};
+    300000000, 302757000, 303875000, 303900000, 304250000, 307000000, 307500000, 307800000,
+    309000000, 310000000, 312000000, 312100000, 313000000, 313850000, 314000000, 314350000,
+    314980000, 315000000, 318000000, 330000000, 345000000, 348000000, 350000000, 387000000,
+    390000000, 418000000, 430000000, 431000000, 431500000, 433075000, 433220000, 433420000,
+    433657070, 433889000, 433920000, 434075000, 434176948, 434390000, 434420000, 434775000,
+    438900000, 440175000, 464000000, 779000000, 868350000, 868400000, 868800000, 868950000,
+    906400000, 915000000, 925000000, 928000000};
 
 typedef enum {
     SubGhzFrequencyAnalyzerStatusIDLE,
@@ -315,7 +315,7 @@ bool subghz_frequency_analyzer_input(InputEvent* event, void* context) {
                     uint32_t frequency_candidate = model->history_frequency[model->selected_index];
                     if(frequency_candidate == 0 ||
                        // !furi_hal_subghz_is_frequency_valid(frequency_candidate) ||
-                       !subghz_txrx_radio_device_is_frequecy_valid(
+                       !subghz_txrx_radio_device_is_frequency_valid(
                            instance->txrx, frequency_candidate) ||
                        prev_freq_to_save == frequency_candidate) {
                         frequency_candidate = 0;
@@ -339,7 +339,7 @@ bool subghz_frequency_analyzer_input(InputEvent* event, void* context) {
                     uint32_t frequency_candidate = subghz_frequency_find_correct(model->frequency);
                     if(frequency_candidate == 0 ||
                        // !furi_hal_subghz_is_frequency_valid(frequency_candidate) ||
-                       !subghz_txrx_radio_device_is_frequecy_valid(
+                       !subghz_txrx_radio_device_is_frequency_valid(
                            instance->txrx, frequency_candidate) ||
                        prev_freq_to_save == frequency_candidate) {
                         frequency_candidate = 0;
@@ -356,7 +356,7 @@ bool subghz_frequency_analyzer_input(InputEvent* event, void* context) {
                     uint32_t frequency_candidate = subghz_frequency_find_correct(model->frequency);
                     if(frequency_candidate == 0 ||
                        // !furi_hal_subghz_is_frequency_valid(frequency_candidate) ||
-                       !subghz_txrx_radio_device_is_frequecy_valid(
+                       !subghz_txrx_radio_device_is_frequency_valid(
                            instance->txrx, frequency_candidate) ||
                        prev_freq_to_save == frequency_candidate) {
                         frequency_candidate = 0;

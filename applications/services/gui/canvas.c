@@ -4,7 +4,6 @@
 
 #include <furi.h>
 #include <furi_hal.h>
-#include <furi_hal_rtc.h>
 #include <stdint.h>
 #include <u8g2_glue.h>
 
@@ -144,7 +143,7 @@ void canvas_set_font(Canvas* canvas, Font font) {
     } else if(font == FontBatteryPercent) {
         u8g2_SetFont(&canvas->fb, u8g2_font_5x7_tf); //u8g2_font_micro_tr);
     } else {
-        furi_crash(NULL);
+        furi_crash();
     }
 }
 
@@ -184,7 +183,7 @@ void canvas_draw_str_aligned(
         x -= (u8g2_GetStrWidth(&canvas->fb, str) / 2);
         break;
     default:
-        furi_crash(NULL);
+        furi_crash();
         break;
     }
 
@@ -198,7 +197,7 @@ void canvas_draw_str_aligned(
         y += (u8g2_GetAscent(&canvas->fb) / 2);
         break;
     default:
-        furi_crash(NULL);
+        furi_crash();
         break;
     }
 
@@ -211,7 +210,7 @@ uint16_t canvas_string_width(Canvas* canvas, const char* str) {
     return u8g2_GetStrWidth(&canvas->fb, str);
 }
 
-uint8_t canvas_glyph_width(Canvas* canvas, char symbol) {
+uint8_t canvas_glyph_width(Canvas* canvas, uint16_t symbol) {
     furi_assert(canvas);
     return u8g2_GetGlyphWidth(&canvas->fb, symbol);
 }
@@ -556,7 +555,7 @@ void canvas_set_orientation(Canvas* canvas, CanvasOrientation orientation) {
             rotate_cb = U8G2_R1;
             break;
         default:
-            furi_assert(0);
+            furi_crash();
         }
 
         if(need_swap) FURI_SWAP(canvas->width, canvas->height);

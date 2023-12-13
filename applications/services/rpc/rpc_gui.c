@@ -1,8 +1,9 @@
-#include "flipper.pb.h"
 #include "rpc_i.h"
-#include "gui.pb.h"
 #include <gui/gui_i.h>
 #include <assets_icons.h>
+
+#include <flipper.pb.h>
+#include <gui.pb.h>
 
 #define TAG "RpcGui"
 
@@ -279,7 +280,7 @@ static void rpc_system_gui_start_virtual_display_process(const PB_Main* request,
         return;
     }
 
-    // TODO: consider refactoring
+    // TODO FL-3511: consider refactoring
     // Using display framebuffer size as an XBM buffer size is like comparing apples and oranges
     // Glad they both are 1024 for now
     size_t buffer_size = canvas_get_buffer_size(rpc_gui->gui->canvas);
