@@ -371,11 +371,14 @@ static NfcCommand mf_ultralight_poller_handler_read_counters(MfUltralightPoller*
 }
 
 static NfcCommand mf_ultralight_poller_handler_read_tearing_flags(MfUltralightPoller* instance) {
+    NfcCommand command = NfcCommandContinue;
+
     if(mf_ultralight_support_feature(
            instance->feature_set,
            MfUltralightFeatureSupportCheckTearingFlag | MfUltralightFeatureSupportSingleCounter)) {
         if(instance->tearing_flag_read == instance->tearing_flag_total) {
             instance->state = MfUltralightPollerStateTryDefaultPass;
+            command = NfcCommandReset;
         } else {
             bool single_counter = mf_ultralight_support_feature(
                 instance->feature_set, MfUltralightFeatureSupportSingleCounter);
@@ -391,6 +394,7 @@ static NfcCommand mf_ultralight_poller_handler_read_tearing_flags(MfUltralightPo
             } else if(instance->error != MfUltralightErrorNone) {
                 FURI_LOG_D(TAG, "Reading tearing flag %d failed", instance->tearing_flag_read);
                 instance->state = MfUltralightPollerStateTryDefaultPass;
+                command = NfcCommandReset;
             } else {
                 instance->tearing_flag_read++;
             }
@@ -398,9 +402,10 @@ static NfcCommand mf_ultralight_poller_handler_read_tearing_flags(MfUltralightPo
     } else {
         FURI_LOG_D(TAG, "Skip reading tearing flags");
         instance->state = MfUltralightPollerStateTryDefaultPass;
+        command = NfcCommandReset;
     }
 
-    return NfcCommandContinue;
+    return command;
 }
 
 static NfcCommand mf_ultralight_poller_handler_auth(MfUltralightPoller* instance) {
@@ -412,7 +417,7 @@ static NfcCommand mf_ultralight_poller_handler_auth(MfUltralightPoller* instance
         command = instance->callback(instance->general_event, instance->context);
         if(!instance->mfu_event.data->auth_context.skip_auth) {
             instance->auth_context.password = instance->mfu_event.data->auth_context.password;
-            uint32_t pass = nfc_util_bytes2num(
+            uint32_t pass = bit_lib_bytes_to_num_be(
                 instance->auth_context.password.data, sizeof(MfUltralightAuthPassword));
             FURI_LOG_D(TAG, "Trying to authenticate with password %08lX", pass);
             instance->error = mf_ultralight_poller_auth_pwd(instance, &instance->auth_context);
@@ -492,14 +497,14 @@ static NfcCommand mf_ultralight_poller_handler_try_default_pass(MfUltralightPoll
             config->pack = instance->auth_context.pack;
         } else if(config->access.authlim == 0) {
             FURI_LOG_D(TAG, "No limits in authentication. Trying default password");
-            nfc_util_num2bytes(
+            bit_lib_num_to_bytes_be(
                 MF_ULTRALIGHT_DEFAULT_PASSWORD,
                 sizeof(MfUltralightAuthPassword),
                 instance->auth_context.password.data);
             instance->error = mf_ultralight_poller_auth_pwd(instance, &instance->auth_context);
             if(instance->error == MfUltralightErrorNone) {
                 FURI_LOG_D(TAG, "Default password detected");
-                nfc_util_num2bytes(
+                bit_lib_num_to_bytes_be(
                     MF_ULTRALIGHT_DEFAULT_PASSWORD,
                     sizeof(MfUltralightAuthPassword),
                     config->password.data);

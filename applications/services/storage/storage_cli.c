@@ -11,7 +11,7 @@
 
 #define MAX_NAME_LENGTH 255
 
-static void storage_cli_print_usage() {
+static void storage_cli_print_usage(void) {
     printf("Usage:\r\n");
     printf("storage <cmd> <path> <args>\r\n");
     printf("The path must start with /int or /ext\r\n");
@@ -603,14 +603,15 @@ static void storage_cli_factory_reset(Cli* cli, FuriString* args, void* context)
     char c = cli_getc(cli);
     if(c == 'y' || c == 'Y') {
         printf("Data will be wiped after reboot.\r\n");
-        furi_hal_rtc_set_flag(FuriHalRtcFlagFactoryReset);
+        furi_hal_rtc_reset_registers();
+        furi_hal_rtc_set_flag(FuriHalRtcFlagStorageFormatInternal);
         power_reboot(PowerBootModeNormal);
     } else {
         printf("Safe choice.\r\n");
     }
 }
 
-void storage_on_system_start() {
+void storage_on_system_start(void) {
 #ifdef SRV_CLI
     Cli* cli = furi_record_open(RECORD_CLI);
     cli_add_command(cli, RECORD_STORAGE, CliCommandFlagParallelSafe, storage_cli, NULL);

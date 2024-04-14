@@ -64,8 +64,9 @@ static Iso14443_3bError iso14443_3b_poller_frame_exchange(
 }
 
 Iso14443_3bError iso14443_3b_poller_activate(Iso14443_3bPoller* instance, Iso14443_3bData* data) {
-    furi_assert(instance);
-    furi_assert(instance->nfc);
+    furi_check(instance);
+    furi_check(instance->nfc);
+    furi_check(data);
 
     iso14443_3b_reset(data);
 
@@ -117,12 +118,13 @@ Iso14443_3bError iso14443_3b_poller_activate(Iso14443_3bPoller* instance, Iso144
         bit_buffer_reset(instance->rx_buffer);
 
         // Send ATTRIB
+        uint8_t cid = 0;
         bit_buffer_append_byte(instance->tx_buffer, 0x1d);
         bit_buffer_append_bytes(instance->tx_buffer, data->uid, ISO14443_3B_UID_SIZE);
         bit_buffer_append_byte(instance->tx_buffer, 0x00);
         bit_buffer_append_byte(instance->tx_buffer, ISO14443_3B_ATTRIB_FRAME_SIZE_256);
         bit_buffer_append_byte(instance->tx_buffer, 0x01);
-        bit_buffer_append_byte(instance->tx_buffer, 0x00);
+        bit_buffer_append_byte(instance->tx_buffer, cid);
 
         ret = iso14443_3b_poller_frame_exchange(
             instance, instance->tx_buffer, instance->rx_buffer, iso14443_3b_get_fwt_fc_max(data));
@@ -138,11 +140,10 @@ Iso14443_3bError iso14443_3b_poller_activate(Iso14443_3bPoller* instance, Iso144
                 bit_buffer_get_size_bytes(instance->rx_buffer));
         }
 
-        if(bit_buffer_get_byte(instance->rx_buffer, 0) != 0) {
-            FURI_LOG_D(
-                TAG,
-                "Incorrect CID in ATTRIB response: %02X",
-                bit_buffer_get_byte(instance->rx_buffer, 0));
+        uint8_t cid_received = bit_buffer_get_byte(instance->rx_buffer, 0);
+        // 15 bit is RFU
+        if((cid_received & 0x7f) != cid) {
+            FURI_LOG_D(TAG, "Incorrect CID in ATTRIB response: %02X", cid_received);
             instance->state = Iso14443_3bPollerStateActivationFailed;
             ret = Iso14443_3bErrorCommunication;
             break;
@@ -155,7 +156,7 @@ Iso14443_3bError iso14443_3b_poller_activate(Iso14443_3bPoller* instance, Iso144
 }
 
 Iso14443_3bError iso14443_3b_poller_halt(Iso14443_3bPoller* instance) {
-    furi_assert(instance);
+    furi_check(instance);
 
     bit_buffer_reset(instance->tx_buffer);
     bit_buffer_reset(instance->rx_buffer);
@@ -188,6 +189,10 @@ Iso14443_3bError iso14443_3b_poller_send_frame(
     Iso14443_3bPoller* instance,
     const BitBuffer* tx_buffer,
     BitBuffer* rx_buffer) {
+    furi_check(instance);
+    furi_check(tx_buffer);
+    furi_check(rx_buffer);
+
     Iso14443_3bError ret;
 
     do {

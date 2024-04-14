@@ -13,6 +13,7 @@ typedef enum {
     Iso14443_4aErrorNotPresent,
     Iso14443_4aErrorProtocol,
     Iso14443_4aErrorTimeout,
+    Iso14443_4aErrorSendExtra,
 } Iso14443_4aError;
 
 typedef enum {
@@ -46,7 +47,7 @@ typedef struct {
 
 // Virtual methods
 
-Iso14443_4aData* iso14443_4a_alloc();
+Iso14443_4aData* iso14443_4a_alloc(void);
 
 void iso14443_4a_free(Iso14443_4aData* data);
 
